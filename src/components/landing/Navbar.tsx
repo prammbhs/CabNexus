@@ -1,10 +1,5 @@
 import { useState, useEffect } from 'react';
-import { 
-  Menu, 
-  X, 
-  ArrowRight,
-  ChevronRight
-} from 'lucide-react';
+import { Menu, X, ArrowRight, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/common/Button';
 
 interface NavbarProps {
@@ -15,11 +10,26 @@ interface NavbarProps {
 export function Navbar({ onOpenDashboard, onSignIn }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 16);
-    };
+    // Always default to light mode — remove any dark class that may exist
+    document.documentElement.classList.remove('dark');
+    setIsDark(false);
+  }, []);
+
+  const toggleTheme = () => {
+    if (isDark) {
+      document.documentElement.classList.remove('dark');
+      setIsDark(false);
+    } else {
+      document.documentElement.classList.add('dark');
+      setIsDark(true);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -29,7 +39,6 @@ export function Navbar({ onOpenDashboard, onSignIn }: NavbarProps) {
     { label: 'Hierarchy', href: '#hierarchy' },
     { label: 'Permissions', href: '#permissions' },
     { label: 'Compliance', href: '#compliance' },
-    { label: 'Operations', href: '#operations' },
     { label: 'How It Works', href: '#how-it-works' },
   ];
 
@@ -37,88 +46,101 @@ export function Navbar({ onOpenDashboard, onSignIn }: NavbarProps) {
     e.preventDefault();
     setMobileMenuOpen(false);
     const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <header 
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-        scrolled 
-          ? 'border-b border-border/80 bg-background/90 backdrop-blur-xl shadow-xs' 
-          : 'border-b border-transparent bg-background/60 backdrop-blur-md'
+    <header
+      className={`sticky top-0 z-50 w-full transition-all duration-200 ${
+        scrolled
+          ? 'border-b border-border bg-background/95 backdrop-blur-sm shadow-[0_1px_0_0_hsl(var(--border))]'
+          : 'bg-background/80 backdrop-blur-sm border-b border-transparent'
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Brand identity: ◈ CabNexus */}
-        <div className="flex items-center gap-3">
-          <a 
-            href="#" 
-            className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg"
-          >
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 via-primary to-emerald-500 text-white font-bold shadow-md shadow-primary/20 group-hover:scale-105 transition-transform duration-200">
-              <span className="text-base font-black tracking-tight">◈</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-lg font-extrabold tracking-tight text-foreground flex items-center gap-1.5">
-                CabNexus
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                  Fleet Ops
-                </span>
-              </span>
-            </div>
-          </a>
-        </div>
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-1" aria-label="Main Navigation">
+        {/* Wordmark — clean, no gradient icon */}
+        <a
+          href="#"
+          className="flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+          aria-label="CabNexus home"
+        >
+          {/* Minimal geometric icon */}
+          <div className="h-7 w-7 rounded-md bg-primary flex items-center justify-center flex-shrink-0">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <rect x="1" y="1" width="5" height="5" rx="1" fill="white" fillOpacity="0.9" />
+              <rect x="8" y="1" width="5" height="5" rx="1" fill="white" fillOpacity="0.6" />
+              <rect x="1" y="8" width="5" height="5" rx="1" fill="white" fillOpacity="0.6" />
+              <rect x="8" y="8" width="5" height="5" rx="1" fill="white" fillOpacity="0.9" />
+            </svg>
+          </div>
+          <span className="text-[15px] font-semibold text-foreground tracking-[-0.01em]">
+            CabNexus
+          </span>
+        </a>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden lg:flex items-center gap-0.5" aria-label="Main Navigation">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={(e) => handleLinkClick(e, link.href)}
-              className="px-3.5 py-2 text-xs font-semibold text-muted-foreground hover:text-foreground rounded-lg transition-colors hover:bg-muted/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground rounded transition-colors hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               {link.label}
             </a>
           ))}
         </nav>
 
-        {/* Action CTAs */}
-        <div className="hidden sm:flex items-center gap-2.5">
-          <Button
-            variant="ghost"
-            size="sm"
+        {/* Right side actions */}
+        <div className="hidden sm:flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="h-8 w-8 rounded-md border border-border bg-background text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-label="Toggle dark/light mode"
+          >
+            {isDark
+              ? <Sun className="h-3.5 w-3.5 text-amber-400" />
+              : <Moon className="h-3.5 w-3.5" />}
+          </button>
+
+          <button
+            type="button"
             onClick={onSignIn}
-            className="text-xs font-semibold text-muted-foreground hover:text-foreground"
+            className="h-8 px-3 text-sm text-muted-foreground hover:text-foreground rounded-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             Sign In
-          </Button>
+          </button>
 
           <Button
             size="sm"
             onClick={onOpenDashboard}
-            className="text-xs font-bold shadow-md shadow-primary/25 bg-primary hover:bg-primary/90 text-primary-foreground group"
+            className="h-8 text-sm font-medium bg-primary hover:bg-primary/90 text-primary-foreground px-3.5 group"
           >
-            <span>Open Dashboard</span>
-            <ArrowRight className="h-3.5 w-3.5 ml-1.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            Open Dashboard
+            <ArrowRight className="h-3.5 w-3.5 ml-1.5 transition-transform duration-150 group-hover:translate-x-0.5" />
           </Button>
         </div>
 
-        {/* Mobile Hamburger Button */}
-        <div className="flex items-center gap-2 sm:hidden">
-          <Button
-            size="sm"
-            onClick={onOpenDashboard}
-            className="text-xs font-bold px-3 py-1.5 h-8 bg-primary text-primary-foreground"
+        {/* Mobile actions */}
+        <div className="flex items-center gap-1.5 sm:hidden">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="h-8 w-8 rounded-md border border-border bg-background text-muted-foreground flex items-center justify-center transition-colors"
+            aria-label="Toggle dark/light mode"
           >
-            Dashboard
-          </Button>
+            {isDark
+              ? <Sun className="h-3.5 w-3.5 text-amber-400" />
+              : <Moon className="h-3.5 w-3.5" />}
+          </button>
+
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-foreground hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="h-8 w-8 rounded-md border border-border bg-background text-foreground flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation menu"
           >
@@ -129,41 +151,32 @@ export function Navbar({ onOpenDashboard, onSignIn }: NavbarProps) {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="sm:hidden border-b border-border bg-card/95 backdrop-blur-xl px-4 py-4 space-y-3 animate-in slide-in-from-top-2 duration-200">
-          <nav className="flex flex-col space-y-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => handleLinkClick(e, link.href)}
-                className="flex items-center justify-between px-3 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/80 transition-colors"
-              >
-                <span>{link.label}</span>
-                <ChevronRight className="h-4 w-4 text-muted-foreground/60" />
-              </a>
-            ))}
-          </nav>
+        <div className="sm:hidden border-b border-border bg-background px-4 py-3 space-y-1 animate-in slide-in-from-top-2 duration-150">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={(e) => handleLinkClick(e, link.href)}
+              className="flex items-center px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
 
-          <div className="pt-3 border-t border-border flex flex-col gap-2">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onSignIn?.();
-              }}
-              className="w-full text-xs font-semibold justify-center"
+          <div className="pt-2 border-t border-border flex flex-col gap-2 mt-2">
+            <button
+              type="button"
+              onClick={() => { setMobileMenuOpen(false); onSignIn?.(); }}
+              className="w-full h-9 text-sm text-muted-foreground hover:text-foreground border border-border rounded-md transition-colors"
             >
               Sign In
-            </Button>
+            </button>
             <Button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenDashboard?.();
-              }}
-              className="w-full text-xs font-bold justify-center bg-primary text-primary-foreground"
+              onClick={() => { setMobileMenuOpen(false); onOpenDashboard?.(); }}
+              className="w-full h-9 text-sm font-medium bg-primary text-primary-foreground justify-center group"
             >
-              <span>Open Dashboard</span>
-              <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+              Open Dashboard
+              <ArrowRight className="h-3.5 w-3.5 ml-1.5 transition-transform group-hover:translate-x-0.5" />
             </Button>
           </div>
         </div>

@@ -41,12 +41,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        brand: {
-          50: "#f0fdf4",
-          100: "#dcfce7",
-          500: "#10b981",
-          600: "#059669",
-          700: "#047857",
+        // Fleet/ops amber — roads, signals, intent
+        amber: {
+          DEFAULT: "hsl(var(--amber))",
+          foreground: "hsl(var(--amber-foreground))",
         },
       },
       borderRadius: {
@@ -54,7 +52,19 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontFamily: {
+        // DM Sans: warm, humanist, designed for UI — not Inter's clinical feel
+        sans: ['"DM Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['"DM Mono"', '"JetBrains Mono"', 'monospace'],
+      },
+      boxShadow: {
+        // Restrained shadow scale — no excessive glow shadows
+        'card': '0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04)',
+        'card-hover': '0 4px 12px 0 rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05)',
+        'panel': '0 0 0 1px rgb(0 0 0 / 0.05), 0 2px 8px 0 rgb(0 0 0 / 0.06)',
+      },
     },
   },
   plugins: [],
 }
+

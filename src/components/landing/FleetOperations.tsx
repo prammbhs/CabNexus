@@ -1,7 +1,7 @@
+import { useState } from 'react';
 import { 
   Car, 
   CheckCircle2, 
-  Filter,
   ArrowRight
 } from 'lucide-react';
 import { Badge } from '@/components/common/Badge';
@@ -12,6 +12,12 @@ interface FleetOperationsProps {
 }
 
 export function FleetOperations({ onOpenDashboard }: FleetOperationsProps) {
+  const [filterFuel, setFilterFuel] = useState<string>('ALL');
+
+  const filteredRows = filterFuel === 'ALL'
+    ? FLEET_PREVIEW_ROWS
+    : FLEET_PREVIEW_ROWS.filter(r => r.fuelType === filterFuel);
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Active':
@@ -33,21 +39,34 @@ export function FleetOperations({ onOpenDashboard }: FleetOperationsProps) {
   };
 
   return (
-    <section id="operations" className="py-16 sm:py-24 relative">
+    <section id="operations" className="py-16 sm:py-24 border-y border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           
           {/* Left: Realistic Fleet Inventory Table */}
-          <div className="lg:col-span-7 rounded-2xl border border-border/80 bg-card p-4 sm:p-6 shadow-md space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-border/60">
+          <div className="lg:col-span-7 rounded-lg border border-border bg-card p-4 sm:p-6 shadow-card space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/60">
               <div className="flex items-center gap-2">
                 <Car className="h-4 w-4 text-primary" />
                 <h3 className="text-sm font-bold text-foreground">Fleet Operations Roster</h3>
               </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Filter className="h-3.5 w-3.5" />
-                <span>Showing 4 of 850 Vehicles</span>
+              
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {['ALL', 'CNG', 'EV', 'Diesel'].map((fuel) => (
+                  <button
+                    key={fuel}
+                    type="button"
+                    onClick={() => setFilterFuel(fuel)}
+                    className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
+                      filterFuel === fuel
+                        ? 'bg-primary text-primary-foreground shadow-xs'
+                        : 'bg-muted text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {fuel}
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -64,7 +83,7 @@ export function FleetOperations({ onOpenDashboard }: FleetOperationsProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/40">
-                  {FLEET_PREVIEW_ROWS.map((row) => (
+                  {filteredRows.map((row) => (
                     <tr key={row.plate} className="hover:bg-muted/30 transition-colors">
                       <td className="py-3">
                         <div className="font-mono font-bold text-foreground">{row.plate}</div>
@@ -104,32 +123,30 @@ export function FleetOperations({ onOpenDashboard }: FleetOperationsProps) {
           {/* Right: Operational Value Proposition & Mini Stats */}
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-3">
-              <Badge variant="outline" className="text-xs font-semibold px-2.5 py-0.5">
-                Central Dispatch Visibility
-              </Badge>
-              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-foreground">
+              <p className="section-label">Fleet Visibility</p>
+              <h2 className="text-3xl sm:text-4xl text-foreground">
                 Know what's happening across your fleet.
               </h2>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm leading-7 text-muted-foreground">
                 Track real-time vehicle allocation, unassigned drivers, regional quotas, and compliance infractions without making a single phone call.
               </p>
             </div>
 
             {/* 3 Mini Stats */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="p-3.5 rounded-xl bg-muted/40 border border-border/60 text-center space-y-1">
-                <div className="text-xl sm:text-2xl font-black text-foreground">850</div>
-                <div className="text-[11px] text-muted-foreground font-medium">Vehicles Active</div>
+              <div className="p-3.5 rounded-lg border border-border bg-muted/30 text-center space-y-1">
+                <div className="text-xl sm:text-2xl font-bold text-foreground tabular-nums">850</div>
+                <div className="text-[11px] text-muted-foreground">Vehicles</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-muted/40 border border-border/60 text-center space-y-1">
-                <div className="text-xl sm:text-2xl font-black text-foreground">920</div>
-                <div className="text-[11px] text-muted-foreground font-medium">Verified Drivers</div>
+              <div className="p-3.5 rounded-lg border border-border bg-muted/30 text-center space-y-1">
+                <div className="text-xl sm:text-2xl font-bold text-foreground tabular-nums">920</div>
+                <div className="text-[11px] text-muted-foreground">Drivers</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-muted/40 border border-border/60 text-center space-y-1">
-                <div className="text-xl sm:text-2xl font-black text-emerald-500">96%</div>
-                <div className="text-[11px] text-muted-foreground font-medium">Compliance Rate</div>
+              <div className="p-3.5 rounded-lg border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-900/20 text-center space-y-1">
+                <div className="text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">96%</div>
+                <div className="text-[11px] text-muted-foreground">Compliance</div>
               </div>
             </div>
 

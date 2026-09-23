@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/common/Button';
 
 interface FinalCTAProps {
@@ -8,64 +8,59 @@ interface FinalCTAProps {
 
 export function FinalCTA({ onOpenDashboard, onExploreFeatures }: FinalCTAProps) {
   return (
-    <section className="py-16 sm:py-24 relative overflow-hidden">
-      {/* Background glow */}
-      <div 
-        aria-hidden="true" 
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 flex transform-gpu justify-center overflow-hidden blur-3xl opacity-30"
-      >
-        <div className="aspect-[1000/400] w-[60rem] bg-gradient-to-t from-primary via-indigo-500 to-emerald-500" />
-      </div>
-
+    <section className="py-20 sm:py-32 border-t border-border bg-foreground dark:bg-card">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl border border-primary/30 bg-gradient-to-b from-card/90 to-background p-8 sm:p-14 text-center max-w-4xl mx-auto shadow-2xl space-y-6">
-          
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            <span>Ready for Production Fleet Operations</span>
+
+        {/* Two-column: heading left, actions right */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
+
+          {/* Left: Headline — bg is always dark so use white explicitly */}
+          <div className="space-y-4 max-w-xl">
+            <p className="text-xs font-semibold uppercase tracking-widest text-white/40 dark:text-muted-foreground">
+              Ready when you are
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.12] text-white dark:text-foreground">
+              Take control of your fleet operations.
+            </h2>
+            <p className="text-sm leading-7 text-white/55 dark:text-muted-foreground">
+              Manage vendors. Onboard drivers. Track compliance.<br className="hidden sm:block" />
+              Run your fleet from one platform.
+            </p>
+
+            {/* Proof points */}
+            <ul className="flex flex-col gap-1.5 pt-2" aria-label="Key capabilities">
+              {[
+                'Full N-Tier Vendor Hierarchy',
+                'Granular Role-Based Permissions',
+                'Automated Compliance Tracking',
+              ].map((point) => (
+                <li key={point} className="flex items-center gap-2.5 text-sm text-white/55 dark:text-muted-foreground">
+                  <span className="h-px w-4 bg-primary inline-block flex-shrink-0" aria-hidden="true" />
+                  {point}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-foreground text-balance">
-            Take control of your fleet operations.
-          </h2>
-
-          <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto text-balance leading-relaxed">
-            Manage vendors. Onboard drivers. Track compliance. Run your fleet from one centralized, tamper-proof platform.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
+          {/* Right: Actions */}
+          <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-3 flex-shrink-0">
             <Button
               size="lg"
               onClick={onOpenDashboard}
-              className="w-full sm:w-auto text-sm font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 px-8 py-6 group"
+              className="text-sm font-medium bg-primary hover:bg-primary/90 text-primary-foreground px-7 h-11 group"
             >
-              <span>Open CabNexus Dashboard</span>
-              <ArrowRight className="h-4 w-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" />
+              Open CabNexus Dashboard
+              <ArrowRight className="h-4 w-4 ml-2 transition-transform duration-150 group-hover:translate-x-0.5" />
             </Button>
 
-            <Button
-              variant="outline"
-              size="lg"
+            {/* Outline button on dark bg — explicit white border + text */}
+            <button
+              type="button"
               onClick={onExploreFeatures}
-              className="w-full sm:w-auto text-sm font-semibold border-border hover:bg-muted/80 px-6 py-6"
+              className="text-sm font-medium px-6 h-11 rounded-md border border-white/25 dark:border-border text-white dark:text-foreground hover:bg-white/10 dark:hover:bg-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               Explore Features
-            </Button>
-          </div>
-
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-              <span>Full N-Tier Hierarchy</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-              <span>Zero Backend Setup Needed</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-              <span>Instant Role Simulation</span>
-            </div>
+            </button>
           </div>
 
         </div>

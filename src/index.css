@@ -1,68 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
+    /* Warm off-white — not cold slate */
+    --background: 36 20% 97%;
+    --foreground: 224 35% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 224 35% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 224 35% 12%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
+    /* Distinct indigo-violet primary — not generic #2563EB */
+    --primary: 248 74% 54%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222 47% 11.2%;
+    --secondary: 36 15% 93%;
+    --secondary-foreground: 224 35% 18%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 36 12% 94%;
+    --muted-foreground: 220 14% 46%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222 47% 11.2%;
+    --accent: 36 12% 90%;
+    --accent-foreground: 224 35% 12%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 4 84% 56%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
+    --border: 220 16% 88%;
+    --input: 220 16% 88%;
+    --ring: 248 74% 54%;
 
-    --radius: 0.625rem;
+    /* Amber accent for fleet/ops identity */
+    --amber: 38 92% 50%;
+    --amber-foreground: 36 100% 12%;
+
+    --radius: 0.5rem;
+
+    /* Sidebar / app-chrome surface */
+    --surface-subtle: 36 14% 95%;
+    --surface-raised: 0 0% 100%;
   }
 
   .dark {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+    /* True warm dark — not cold navy */
+    --background: 224 28% 8%;
+    --foreground: 216 22% 90%;
 
-    --card: 224 71% 6%;
-    --card-foreground: 213 31% 91%;
+    --card: 224 24% 10%;
+    --card-foreground: 216 22% 90%;
 
-    --popover: 224 71% 6%;
-    --popover-foreground: 213 31% 91%;
+    --popover: 224 24% 10%;
+    --popover-foreground: 216 22% 90%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 248 72% 62%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 224 22% 16%;
+    --secondary-foreground: 216 22% 86%;
 
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
+    --muted: 224 22% 14%;
+    --muted-foreground: 218 14% 56%;
 
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 224 22% 16%;
+    --accent-foreground: 216 22% 90%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 4 72% 42%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 217 91% 60%;
+    --border: 224 18% 18%;
+    --input: 224 18% 18%;
+    --ring: 248 72% 62%;
+
+    --amber: 38 88% 52%;
+    --amber-foreground: 36 100% 12%;
+
+    --surface-subtle: 224 24% 12%;
+    --surface-raised: 224 24% 13%;
   }
 }
 
@@ -70,8 +89,55 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/20;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    @apply bg-background text-foreground antialiased selection:bg-primary/15 selection:text-primary font-sans;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+  button, a {
+    touch-action: manipulation;
+  }
+  /* Consistent heading weight rhythm — not everything font-black */
+  h1 { @apply font-extrabold tracking-tight; }
+  h2 { @apply font-bold tracking-tight; }
+  h3 { @apply font-semibold; }
+}
+
+@layer utilities {
+  /* Section label — replaces pulsing-pill eyebrow badges */
+  .section-label {
+    @apply text-xs font-semibold uppercase tracking-widest text-muted-foreground;
+    letter-spacing: 0.1em;
+  }
+
+  /* Amber accent utility */
+  .text-amber {
+    color: hsl(var(--amber));
+  }
+  .bg-amber {
+    background-color: hsl(var(--amber));
+  }
+  .border-amber {
+    border-color: hsl(var(--amber));
+  }
+
+  /* Subtle surface — app-chrome panels */
+  .bg-surface-subtle {
+    background-color: hsl(var(--surface-subtle));
+  }
+
+  /* Status dot — clean, no pulse animation */
+  .status-dot-active {
+    @apply inline-block h-1.5 w-1.5 rounded-full bg-emerald-500;
+  }
+  .status-dot-warn {
+    @apply inline-block h-1.5 w-1.5 rounded-full bg-amber-400;
+  }
+  .status-dot-error {
+    @apply inline-block h-1.5 w-1.5 rounded-full bg-rose-500;
   }
 }
+

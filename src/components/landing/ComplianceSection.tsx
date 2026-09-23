@@ -34,19 +34,17 @@ export function ComplianceSection() {
   };
 
   return (
-    <section id="compliance" className="py-16 sm:py-24 border-y border-border/60 bg-muted/10 relative">
+    <section id="compliance" className="py-16 sm:py-24 border-y border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <Badge variant="outline" className="text-xs font-semibold px-2.5 py-0.5">
-            Automated Fleet Safety &amp; Legal Guardrails
-          </Badge>
-          <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-foreground">
+        <div className="max-w-2xl space-y-3">
+          <p className="section-label">Document Governance</p>
+          <h2 className="text-3xl sm:text-4xl text-foreground">
             Stay ahead of compliance.
           </h2>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-            Keep track of licenses, insurance, permits, RCs, and other statutory documents from one centralized, automated governance center.
+          <p className="text-sm leading-7 text-muted-foreground">
+            Keep track of licenses, insurance, permits, RCs, and other statutory documents from one centralized governance center.
           </p>
         </div>
 
@@ -54,57 +52,57 @@ export function ComplianceSection() {
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left: Health Rate Card & Metrics */}
-          <div className="lg:col-span-4 rounded-2xl border border-border/80 bg-card p-6 shadow-sm space-y-6">
+          <div className="lg:col-span-4 rounded-lg border border-border bg-card p-6 shadow-card space-y-6">
             <div className="space-y-1">
               <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 Fleet Compliance Rate
               </h3>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl sm:text-5xl font-black tracking-tight text-foreground">
+                <span className="text-4xl sm:text-5xl font-bold tabular-nums text-foreground">
                   {COMPLIANCE_METRICS.overallScore}
                 </span>
-                <span className="text-xs font-bold text-emerald-500">Above National Target</span>
+                <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">Compliant</span>
               </div>
             </div>
 
             {/* Progress gauge bar */}
-            <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
+            <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
               <div 
-                className="bg-gradient-to-r from-emerald-500 to-primary h-full rounded-full transition-all duration-500" 
+                className="bg-primary h-full rounded-full transition-all duration-500" 
                 style={{ width: COMPLIANCE_METRICS.overallScore }} 
               />
             </div>
 
             {/* Metric counters breakdown */}
             <div className="grid grid-cols-2 gap-3 pt-2">
-              <div className="p-3 rounded-xl bg-muted/40 border border-border/50">
-                <span className="text-xs text-muted-foreground">Valid Documents</span>
-                <div className="text-xl font-extrabold text-foreground">{COMPLIANCE_METRICS.validCount}</div>
-                <span className="text-[10px] text-emerald-500 font-semibold">Active dispatch</span>
+              <div className="p-3 rounded-lg border border-border bg-muted/30">
+                <span className="text-xs text-muted-foreground">Valid</span>
+                <div className="text-xl font-bold text-foreground tabular-nums">{COMPLIANCE_METRICS.validCount}</div>
+                <span className="text-[10px] text-emerald-600 dark:text-emerald-400">Active dispatch</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-muted/40 border border-border/50">
+              <div className="p-3 rounded-lg border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-900/20">
                 <span className="text-xs text-muted-foreground">Expiring (&le;30d)</span>
-                <div className="text-xl font-extrabold text-amber-500">{COMPLIANCE_METRICS.expiringSoonCount}</div>
-                <span className="text-[10px] text-amber-500 font-semibold">Renewal alerts sent</span>
+                <div className="text-xl font-bold text-amber-600 dark:text-amber-400 tabular-nums">{COMPLIANCE_METRICS.expiringSoonCount}</div>
+                <span className="text-[10px] text-muted-foreground">Renewal due</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-muted/40 border border-border/50">
-                <span className="text-xs text-muted-foreground">Expired Documents</span>
-                <div className="text-xl font-extrabold text-rose-500">{COMPLIANCE_METRICS.expiredCount}</div>
-                <span className="text-[10px] text-rose-500 font-semibold">Automatic holds</span>
+              <div className="p-3 rounded-lg border border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-900/20">
+                <span className="text-xs text-muted-foreground">Expired</span>
+                <div className="text-xl font-bold text-rose-600 dark:text-rose-400 tabular-nums">{COMPLIANCE_METRICS.expiredCount}</div>
+                <span className="text-[10px] text-muted-foreground">Auto hold active</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-muted/40 border border-border/50">
-                <span className="text-xs text-muted-foreground">Missing Records</span>
-                <div className="text-xl font-extrabold text-muted-foreground">{COMPLIANCE_METRICS.missingCount}</div>
-                <span className="text-[10px] text-muted-foreground font-semibold">Pending KYC</span>
+              <div className="p-3 rounded-lg border border-border bg-muted/30">
+                <span className="text-xs text-muted-foreground">Missing</span>
+                <div className="text-xl font-bold text-muted-foreground tabular-nums">{COMPLIANCE_METRICS.missingCount}</div>
+                <span className="text-[10px] text-muted-foreground">Pending KYC</span>
               </div>
             </div>
           </div>
 
           {/* Right: Real-time Document Status Stream */}
-          <div className="lg:col-span-8 rounded-2xl border border-border/80 bg-card p-6 shadow-sm space-y-4">
+          <div className="lg:col-span-8 rounded-lg border border-border bg-card p-6 shadow-card space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-border/60">
               <div className="flex items-center gap-2">
                 <FileText className="h-4 w-4 text-primary" />

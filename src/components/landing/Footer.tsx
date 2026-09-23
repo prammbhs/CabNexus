@@ -10,105 +10,90 @@ export function Footer({ onOpenDashboard, onSignIn }: FooterProps) {
   };
 
   return (
-    <footer className="border-t border-border/80 bg-card/60 backdrop-blur-md">
+    <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
-          
-          {/* Brand Info */}
-          <div className="md:col-span-6 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-600 via-primary to-emerald-500 text-white font-bold text-sm">
-                ◈
+
+          {/* Brand */}
+          <div className="md:col-span-5 space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="h-6 w-6 rounded bg-primary flex items-center justify-center flex-shrink-0">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                  <rect x="0.5" y="0.5" width="4" height="4" rx="0.75" fill="white" fillOpacity="0.9" />
+                  <rect x="5.5" y="0.5" width="4" height="4" rx="0.75" fill="white" fillOpacity="0.5" />
+                  <rect x="0.5" y="5.5" width="4" height="4" rx="0.75" fill="white" fillOpacity="0.5" />
+                  <rect x="5.5" y="5.5" width="4" height="4" rx="0.75" fill="white" fillOpacity="0.9" />
+                </svg>
               </div>
-              <span className="text-lg font-black tracking-tight text-foreground">
+              <span className="text-[15px] font-semibold text-foreground tracking-[-0.01em]">
                 CabNexus
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-muted-foreground max-w-sm leading-relaxed">
-              Vendor, Fleet, Driver &amp; Compliance Management Platform for multi-city ride-hailing and transport organizations.
+            <p className="text-sm text-muted-foreground leading-6 max-w-xs">
+              Vendor, Fleet, Driver &amp; Compliance Management Platform for multi-city ride-hailing organizations.
             </p>
-            <div className="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-mono font-medium bg-muted/60 text-muted-foreground border border-border">
+            <span className="inline-flex items-center text-xs font-mono text-muted-foreground">
               Built with React + TypeScript
-            </div>
+            </span>
           </div>
 
-          {/* Product Links */}
-          <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">
+          {/* Product links */}
+          <div className="md:col-span-3 space-y-4">
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Product
             </h4>
-            <ul className="space-y-2 text-xs text-muted-foreground">
-              <li>
-                <button 
-                  type="button" 
-                  onClick={() => scrollTo('#features')} 
-                  className="hover:text-foreground transition-colors"
-                >
-                  Features
-                </button>
-              </li>
-              <li>
-                <button 
-                  type="button" 
-                  onClick={onOpenDashboard} 
-                  className="hover:text-foreground transition-colors font-medium text-primary"
-                >
-                  Dashboard
-                </button>
-              </li>
-              <li>
-                <button 
-                  type="button" 
-                  onClick={() => scrollTo('#compliance')} 
-                  className="hover:text-foreground transition-colors"
-                >
-                  Compliance Center
-                </button>
-              </li>
-              <li>
-                <button 
-                  type="button" 
-                  onClick={() => scrollTo('#hierarchy')} 
-                  className="hover:text-foreground transition-colors"
-                >
-                  Vendor Hierarchy
-                </button>
-              </li>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'Features', action: () => scrollTo('#features') },
+                { label: 'Dashboard', action: onOpenDashboard },
+                { label: 'Compliance', action: () => scrollTo('#compliance') },
+                { label: 'Hierarchy', action: () => scrollTo('#hierarchy') },
+              ].map(({ label, action }) => (
+                <li key={label}>
+                  <button
+                    type="button"
+                    onClick={action}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus-visible:underline"
+                  >
+                    {label}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Developer / Demo Links */}
-          <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">
-              Developer &amp; Evaluation
+          {/* Developer links */}
+          <div className="md:col-span-4 space-y-4">
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Developer
             </h4>
-            <ul className="space-y-2 text-xs text-muted-foreground">
+            <ul className="space-y-2.5">
               <li>
-                <a 
-                  href="https://github.com" 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="hover:text-foreground transition-colors"
+                <a
+                  href="https://github.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  GitHub Repository
+                  GitHub
                 </a>
               </li>
               <li>
-                <button 
-                  type="button" 
-                  onClick={onSignIn} 
-                  className="hover:text-foreground transition-colors"
+                <button
+                  type="button"
+                  onClick={onSignIn}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Demo Role Switcher
+                  Documentation
                 </button>
               </li>
               <li>
-                <button 
-                  type="button" 
-                  onClick={onOpenDashboard} 
-                  className="hover:text-foreground transition-colors"
+                <button
+                  type="button"
+                  onClick={onOpenDashboard}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Interactive Walkthrough
+                  Demo
                 </button>
               </li>
             </ul>
@@ -117,15 +102,9 @@ export function Footer({ onOpenDashboard, onSignIn }: FooterProps) {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-border/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <div>
-            &copy; 2026 CabNexus Platform. Frontend Technical Evaluation.
-          </div>
-          <div className="flex items-center gap-4">
-            <span>No external dependencies required</span>
-            <span>•</span>
-            <span>Pure client-side simulation</span>
-          </div>
+        <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-muted-foreground">
+          <span>© 2026 CabNexus</span>
+          <span>Frontend Technical Evaluation · React + TypeScript + Vite</span>
         </div>
       </div>
     </footer>

@@ -17,19 +17,17 @@ export function ProductPreview({ onOpenDashboard }: ProductPreviewProps) {
   const [activeTab, setActiveTab] = useState<'vendors' | 'drivers' | 'compliance'>('vendors');
 
   return (
-    <section className="py-16 sm:py-24 relative">
+    <section className="py-16 sm:py-24 border-y border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <Badge variant="outline" className="text-xs font-semibold px-2.5 py-0.5">
-            Application Surface Previews
-          </Badge>
-          <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-foreground">
+        <div className="max-w-2xl space-y-3">
+          <p className="section-label">Product Preview</p>
+          <h2 className="text-3xl sm:text-4xl text-foreground">
             Experience the actual product.
           </h2>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-            Take a closer look at the key operational interfaces designed for speed, clarity, and zero-loss dispatch governance.
+          <p className="text-sm leading-7 text-muted-foreground">
+            The key operational interfaces designed for speed, clarity, and zero-loss dispatch governance.
           </p>
         </div>
 

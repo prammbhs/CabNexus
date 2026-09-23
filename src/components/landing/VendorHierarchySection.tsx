@@ -8,7 +8,9 @@ import {
   Users, 
   ShieldCheck, 
   Info,
-  CheckCircle2
+  CheckCircle2,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { Badge } from '@/components/common/Badge';
 import { VENDOR_TREE_DATA, HierarchyNode } from '@/data/landingData';
@@ -19,7 +21,24 @@ export function VendorHierarchySection() {
     'v-root': true,
     'v-north': true,
     'v-punjab': true,
+    'v-south': true,
   });
+
+  const expandAll = () => {
+    setExpandedNodes({
+      'v-root': true,
+      'v-north': true,
+      'v-punjab': true,
+      'v-haryana': true,
+      'v-south': true,
+      'v-karnataka': true,
+      'v-telangana': true,
+    });
+  };
+
+  const collapseAll = () => {
+    setExpandedNodes({ 'v-root': true });
+  };
 
   const toggleNode = (nodeId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -88,18 +107,16 @@ export function VendorHierarchySection() {
   };
 
   return (
-    <section id="hierarchy" className="py-16 sm:py-24 border-y border-border/60 bg-muted/10 relative">
+    <section id="hierarchy" className="py-16 sm:py-24 border-y border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-3xl space-y-3">
-          <Badge variant="outline" className="text-xs font-semibold px-2.5 py-0.5">
-            Architectural Core
-          </Badge>
-          <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-foreground">
+        <div className="max-w-2xl space-y-3">
+          <p className="section-label">Vendor Architecture</p>
+          <h2 className="text-3xl sm:text-4xl text-foreground">
             Built for multi-level fleet organizations.
           </h2>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+          <p className="text-sm leading-7 text-muted-foreground">
             Support arbitrary N-level depth from national super vendors down to regional hubs, city franchises, and local sub-contractors.
           </p>
         </div>
@@ -108,13 +125,30 @@ export function VendorHierarchySection() {
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left Tree Explorer */}
-          <div className="lg:col-span-7 rounded-2xl border border-border/80 bg-card p-4 sm:p-6 shadow-xs space-y-4">
+          <div className="lg:col-span-7 rounded-lg border border-border bg-card p-4 sm:p-6 shadow-card space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-border/60">
               <div className="flex items-center gap-2">
                 <GitBranch className="h-4 w-4 text-primary" />
                 <h3 className="text-sm font-bold text-foreground">Interactive Hierarchy Explorer</h3>
               </div>
-              <span className="text-[11px] text-muted-foreground font-mono">Click node to inspect</span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={expandAll}
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-muted-foreground hover:text-foreground px-2 py-1 rounded bg-muted/60 hover:bg-muted"
+                >
+                  <Maximize2 className="h-3 w-3" />
+                  <span>Expand All</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={collapseAll}
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-muted-foreground hover:text-foreground px-2 py-1 rounded bg-muted/60 hover:bg-muted"
+                >
+                  <Minimize2 className="h-3 w-3" />
+                  <span>Collapse</span>
+                </button>
+              </div>
             </div>
 
             <div className="space-y-2 max-h-[460px] overflow-y-auto pr-1">
@@ -131,7 +165,7 @@ export function VendorHierarchySection() {
           <div className="lg:col-span-5 space-y-6">
             
             {/* Active Node Detail Card */}
-            <div className="rounded-2xl border border-primary/40 bg-gradient-to-br from-card via-card to-primary/5 p-6 shadow-md space-y-5">
+            <div className="rounded-lg border border-border bg-card p-6 shadow-card space-y-5">
               <div className="flex items-center justify-between">
                 <Badge variant="secondary" className="text-xs font-semibold">
                   {selectedNode.level} Inspector
