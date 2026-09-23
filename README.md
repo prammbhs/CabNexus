@@ -117,15 +117,15 @@ src/
 ## 7. Screenshots & Interface Previews
 
 ### Role Switcher & Login
-<img width="1440" height="900" alt="image" src="https://github.com/user-attachments/assets/5d4302ba-6656-4453-9c12-2aa41f052905" />
+
 *Persona switcher showing email addresses, privilege badges, and supervisory reporting lines.*
 
 ### Vendor Topology & Tree Map
-<img width="1435" height="896" alt="image" src="https://github.com/user-attachments/assets/6519f8fd-390e-47f6-aef9-3df7bb81e7f7" />
+
 *Multi-level vendor tree view reflecting parent-child dependencies and vehicle capacity allocations.*
 
 ### Subordinate & Driver Permission Governance
-<img width="1428" height="884" alt="image" src="https://github.com/user-attachments/assets/9cbc32b5-4f3e-4adc-959f-4ff1f63e76d5" />
+
 *Granular permission control scoped strictly to authorized subordinates with parent authority inheritance.*
 
 ---
