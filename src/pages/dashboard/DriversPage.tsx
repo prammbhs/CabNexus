@@ -39,6 +39,16 @@ export function DriversPage() {
     return drv.vendorId === 'v-amritsar';
   });
 
+  const [formError, setFormError] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage((cur) => (cur === msg ? null : cur));
+    }, 3500);
+  };
+
   const filteredDrivers = scopedDrivers.filter((d) => {
     const matchesSearch =
       d.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -51,29 +61,46 @@ export function DriversPage() {
 
   const handleAddDriver = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newDriver.name || !newDriver.licenseNo) return;
+    setFormError(null);
+
+    const cleanPlate = newDriver.assignedPlate ? newDriver.assignedPlate.toUpperCase().replace(/\s+/g, '') : null;
+    const cleanLicense = newDriver.licenseNo.trim().toUpperCase();
+
+    if (!newDriver.name.trim() || !cleanLicense) {
+      setFormError('Driver name and commercial driving license number are mandatory.');
+      return;
+    }
+
+    // Check duplicate license
+    const existingLicense = drivers.some(
+      (d) => d.licenseNo.toUpperCase() === cleanLicense
+    );
+    if (existingLicense) {
+      setFormError(`Duplicate License: Commercial license ${cleanLicense} is already registered in the system.`);
+      return;
+    }
 
     // Check conflict: Plate already assigned to another driver?
-    if (newDriver.assignedPlate) {
+    if (cleanPlate) {
       const alreadyAssigned = drivers.some(
-        (d) => d.assignedPlate?.toUpperCase() === newDriver.assignedPlate.toUpperCase()
+        (d) => d.assignedPlate?.toUpperCase() === cleanPlate
       );
       if (alreadyAssigned) {
-        alert(`1:1 Conflict Rule: Vehicle ${newDriver.assignedPlate.toUpperCase()} is already bound to another active driver.`);
+        setFormError(`1:1 Conflict Invariant: Vehicle ${cleanPlate} is already bound to another active driver.`);
         return;
       }
     }
 
     const added: Driver = {
       id: `drv-${Date.now()}`,
-      name: newDriver.name,
-      phone: newDriver.phone || '+91 98000 00000',
-      licenseNo: newDriver.licenseNo.toUpperCase(),
+      name: newDriver.name.trim(),
+      phone: newDriver.phone.trim() || '+91 98000 00000',
+      licenseNo: cleanLicense,
       licenseExpiry: '2029-12-31',
       vendorId: role.id === 'local_vendor' ? 'v-amritsar' : 'v-punjab',
       vendorName: role.vendorName,
-      assignedVehicleId: newDriver.assignedPlate ? `cab-${Date.now()}` : null,
-      assignedPlate: newDriver.assignedPlate ? newDriver.assignedPlate.toUpperCase().replace(/\s+/g, '') : null,
+      assignedVehicleId: cleanPlate ? `cab-${Date.now()}` : null,
+      assignedPlate: cleanPlate,
       status: 'Active',
       kycVerified: true,
       joinedAt: new Date().toISOString().split('T')[0],
@@ -81,12 +108,14 @@ export function DriversPage() {
 
     setDrivers([added, ...drivers]);
     setIsSlideOverOpen(false);
+    setFormError(null);
     setNewDriver({
       name: '',
       phone: '',
       licenseNo: '',
       assignedPlate: '',
     });
+    showToast(`Driver ${added.name} successfully onboarded and verified.`);
   };
 
   return (
@@ -114,6 +143,14 @@ export function DriversPage() {
           Onboard Driver
         </button>
       </div>
+
+      {/* Toast Feedback */}
+      {toastMessage && (
+        <div className="flex items-center gap-2 p-3 text-xs bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 rounded-lg animate-in fade-in slide-in-from-top-2">
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-500" />
+          <span className="font-medium">{toastMessage}</span>
+        </div>
+      )}
 
       {/* Filter toolbar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
@@ -228,6 +265,25 @@ export function DriversPage() {
             </tbody>
           </table>
         </div>
+
+        {filteredDrivers.length === 0 && (
+          <div className="py-12 px-4 text-center border-t border-border/40">
+            <Users className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+            <p className="text-sm font-semibold text-foreground">No drivers match your criteria</p>
+            <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
+              Try adjusting your search query, clearing status filters, or onboard a new commercial driver.
+            </p>
+            <button
+              onClick={() => {
+                setSearch('');
+                setStatusFilter('all');
+              }}
+              className="mt-3 text-xs font-semibold text-primary hover:underline"
+            >
+              Reset Filters
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Slide-over Drawer for Add Driver */}
@@ -250,6 +306,16 @@ export function DriversPage() {
                   <X className="h-5 w-5" />
                 </button>
               </div>
+
+              {formError && (
+                <div className="flex items-start gap-2 p-3 text-xs bg-destructive/10 border border-destructive/20 text-destructive rounded-lg animate-in fade-in">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-semibold block">Validation Error</span>
+                    <span>{formError}</span>
+                  </div>
+                </div>
+              )}
 
               <form id="add-driver-form" onSubmit={handleAddDriver} className="space-y-4 text-xs">
                 <div>

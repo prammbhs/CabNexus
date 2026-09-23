@@ -53,11 +53,20 @@ export function FleetPage() {
     return matchesSearch && matchesFuel && matchesStatus;
   });
 
+  // Form validation errors and toast alert
+  const [formError, setFormError] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+
   const handleToggleHold = (id: string) => {
     setVehicles((prev) =>
       prev.map((v) => {
         if (v.id === id) {
           const nextStatus: VehicleStatus = v.status === 'Hold' ? 'Active' : 'Hold';
+          setToastMessage({
+            text: `Vehicle ${v.plate} dispatch status changed to ${nextStatus.toUpperCase()}`,
+            type: nextStatus === 'Active' ? 'success' : 'error',
+          });
+          setTimeout(() => setToastMessage(null), 3500);
           return { ...v, status: nextStatus };
         }
         return v;
@@ -67,17 +76,35 @@ export function FleetPage() {
 
   const handleAddVehicle = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newVehicle.plate || !newVehicle.model) return;
+    setFormError(null);
+
+    const cleanPlate = newVehicle.plate.toUpperCase().replace(/\s+/g, '');
+    if (!cleanPlate || cleanPlate.length < 6) {
+      setFormError('Invalid Registration: Plate number must be at least 6 alphanumeric characters.');
+      return;
+    }
+
+    if (!newVehicle.model.trim()) {
+      setFormError('Vehicle model name is required.');
+      return;
+    }
+
+    // Duplicate check
+    const duplicate = vehicles.some((v) => v.plate.replace(/\s+/g, '') === cleanPlate);
+    if (duplicate) {
+      setFormError(`Conflict: A vehicle with registration plate ${cleanPlate} already exists in the ledger.`);
+      return;
+    }
 
     const added: Vehicle = {
       id: `cab-${Date.now()}`,
-      plate: newVehicle.plate.toUpperCase().replace(/\s+/g, ''),
-      model: newVehicle.model,
+      plate: cleanPlate,
+      model: newVehicle.model.trim(),
       fuelType: newVehicle.fuelType,
       vendorId: role.id === 'local_vendor' ? 'v-amritsar' : 'v-punjab',
       vendorName: role.vendorName,
       driverId: null,
-      driverName: newVehicle.driverName || null,
+      driverName: newVehicle.driverName?.trim() || null,
       status: 'Active',
       compliance: 'Valid',
       insuranceExpiry: '2027-12-31',
@@ -95,6 +122,11 @@ export function FleetPage() {
       vendorName: role.vendorName,
       driverName: '',
     });
+    setToastMessage({
+      text: `Vehicle ${added.plate} (${added.model}) onboarded successfully!`,
+      type: 'success',
+    });
+    setTimeout(() => setToastMessage(null), 3500);
   };
 
   return (
@@ -115,13 +147,36 @@ export function FleetPage() {
 
         <button
           type="button"
-          onClick={() => setIsSlideOverOpen(true)}
+          onClick={() => {
+            setFormError(null);
+            setIsSlideOverOpen(true);
+          }}
           className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg bg-primary text-primary-foreground hover:opacity-95 transition-all shadow-sm"
         >
           <Plus className="h-4 w-4" />
           Onboard Vehicle
         </button>
       </div>
+
+      {/* Toast Alert Feedback */}
+      {toastMessage && (
+        <div
+          className={`p-3 rounded-lg text-xs font-semibold flex items-center justify-between border animate-in slide-in-from-top duration-200 ${
+            toastMessage.type === 'success'
+              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+              : 'bg-destructive/10 text-destructive border-destructive/20'
+          }`}
+        >
+          <span>{toastMessage.text}</span>
+          <button
+            type="button"
+            onClick={() => setToastMessage(null)}
+            className="p-0.5 rounded hover:opacity-70"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* Filter toolbar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
@@ -265,6 +320,13 @@ export function FleetPage() {
               })}
             </tbody>
           </table>
+          {filteredVehicles.length === 0 && (
+            <div className="py-12 text-center text-xs text-muted-foreground">
+              <Car className="h-8 w-8 mx-auto mb-2 opacity-40 text-muted-foreground" />
+              <p className="font-semibold text-foreground">No vehicles found matching current criteria</p>
+              <p className="mt-0.5">Try adjusting your search query, fuel filter, or status filter.</p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -288,6 +350,14 @@ export function FleetPage() {
                   <X className="h-5 w-5" />
                 </button>
               </div>
+
+              {/* Validation Error Banner */}
+              {formError && (
+                <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-xs font-semibold flex items-center gap-2 border border-destructive/20 animate-in fade-in">
+                  <ShieldAlert className="h-4 w-4 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
 
               <form id="add-vehicle-form" onSubmit={handleAddVehicle} className="space-y-4 text-xs">
                 <div>
