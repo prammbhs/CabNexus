@@ -117,15 +117,15 @@ src/
 ## 7. Screenshots & Interface Previews
 
 ### Role Switcher & Login
-
+![Roles image](<screenshots/Screenshot 2026-09-23 143306.png>)
 *Persona switcher showing email addresses, privilege badges, and supervisory reporting lines.*
 
 ### Vendor Topology & Tree Map
-
+![Vendor Topology](<screenshots/Screenshot 2026-09-23 143358.png>)
 *Multi-level vendor tree view reflecting parent-child dependencies and vehicle capacity allocations.*
 
 ### Subordinate & Driver Permission Governance
-
+![Permissions management](<screenshots/Screenshot 2026-09-23 135111.png>)
 *Granular permission control scoped strictly to authorized subordinates with parent authority inheritance.*
 
 ---
