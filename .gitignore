@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.agents
+developmentplan.md
+skills-lock.json
+__tests__
+landingpage.md
+webappflow.md
+vendor_cab_driver_onboarding_project_requirements.md
